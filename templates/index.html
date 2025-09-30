@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ticket Sales Analytics</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f8f9fa; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; margin-bottom: 30px; }
+        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
+        .chart-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; text-align: center; background: #fff; }
+        .chart-card img { max-width: 100%; height: auto; border-radius: 5px; }
+        .btn { background: #007bff; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 5px; border: none; cursor: pointer; }
+        .btn:hover { background: #0056b3; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #1e7e34; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn-warning:hover { background: #e0a800; }
+        .nav-buttons { text-align: center; margin: 30px 0; padding: 20px; background: #e9ecef; border-radius: 8px; }
+        .section { margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ticket Sales Analytics Dashboard</h1>
+
+        <div class="nav-buttons">
+            <a href="/run-analysis" class="btn btn-success">Запустить полный анализ</a>
+            <a href="/create-interactive-category" class="btn btn-warning">Создать интерактивные графики</a>
+            <a href="/interactive-charts" class="btn">Просмотреть интерактивные графики</a>
+        </div>
+
+        <div class="section">
+            <h2>Статические графики</h2>
+            {% if charts %}
+            <div class="chart-grid">
+                {% for chart in charts %}
+                <div class="chart-card">
+                    <h3>{{ chart.name }}</h3>
+                    <img src="/charts/{{ chart.filename }}" alt="{{ chart.name }}">
+                    <p>Создан: {{ chart.created_time }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="text-align: center; color: #6c757d;">Графики еще не созданы. Запустите анализ.</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Интерактивные графики</h2>
+            {% if interactive_charts %}
+            <div class="chart-grid">
+                {% for chart in interactive_charts %}
+                <div class="chart-card">
+                    <h3>{{ chart.name }}</h3>
+                    <p>Интерактивный график</p>
+                    <a href="/interactive/{{ chart.filename }}" target="_blank" class="btn">Открыть</a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="text-align: center; color: #6c757d;">Интерактивные графики еще не созданы.</p>
+            <div style="text-align: center;">
+                <a href="/create-interactive-category" class="btn btn-warning">Создать интерактивные графики</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Excel отчеты</h2>
+            {% if exports %}
+            <ul>
+                {% for export in exports %}
+                <li style="margin: 10px 0; padding: 10px; background: white; border-radius: 5px;">
+                    <a href="/exports/{{ export.filename }}" style="text-decoration: none; color: #007bff; font-weight: bold;">
+                        {{ export.filename }}
+                    </a>
+                    <span style="color: #6c757d; margin-left: 10px;">({{ export.size }})</span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p style="text-align: center; color: #6c757d;">Excel отчеты еще не созданы.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
